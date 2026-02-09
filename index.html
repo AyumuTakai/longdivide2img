@@ -77,6 +77,8 @@
             const idx = parseInt(samplesSelect.value);
             // console.log('change', idx, samples);
             if (!isNaN(idx) && idx >= 0 && samples.length > idx) {
+                document.getElementById("divisor").value = "";
+                document.getElementById("dividend").value = "";
                 setScript(samples[idx]);
                 generate(svg, samples[idx]);
             }
@@ -97,7 +99,12 @@
 
             const content = document.querySelector("svg").outerHTML;
             const blob = new Blob([content], { "type": "image/svg+xml" });
-            const filename = `LongDiv2Img_${divisor}_${dividend}.svg`;
+
+            let filename = "LongDiv2Img";
+            if(divisor.length != 0 && dividend.length != 0) {                
+                filename += `_${divisor}_${dividend}`;
+            }
+            filename += '.svg';
 
             downloadButton.setAttribute("download", filename);
             document.getElementById("download").href = window.URL.createObjectURL(blob);
