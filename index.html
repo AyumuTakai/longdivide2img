@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LongDiv2Img</title>
+    <style>
+        body {
+            background-color: #ccc;
+        }
+
+        textarea {
+            font-family: monospace;
+            font-size: 16px;
+        }
+
+        svg {
+            background-color: white;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>割り算の筆算をSVG画像化</h1>
+    <p>精密な位置合せはダウンロードしたSVGファイルを編集してください。</p>
+    <p>実際の文字は作成時ではなく表示環境のフォントに依存します。</p>
+    <div><!--
+            radix: <input id="radix" type="text" value="10"><br />
+            fontsize: <input id="fontSize" type="number" value="100">
+        -->
+        <select id="samples">
+            <option value="">サンプルを選択</option>
+        </select><br>
+        <p>以下の計算機能は整数のみ対応の簡易版です。桁がズレたり、対応していない計算はテキストボックスに手作業で記述してください。</p>
+        <input id="divisor" type="text"> ÷ <input id="dividend" type="text"><button id="calc">計算&生成</button><br />
+        <p>以下の内容をSVG画像化します。各行の右側に説明文なども記述することができます。</p>
+
+        <textarea id="script" rows="20" cols="40"></textarea><br />
+        <button id="generate" type="button">再生成</button>
+    </div>
+    <svg width="400" height="400" xmlns="http://www.w3.org/2000/svg">
+        <g font-size="10" font-family="math" id="numbers">
+        </g>
+    </svg>
+    <div>
+        <a id="download" href="#" download="test.svg">SVG画像をダウンロード</a>
+    </div>
+    <script src="./longdivision.js"></script>
+    <script src="./renderSVG.js"></script>
+    <script src="./samples.js"></script>
+    <script>
+
+    </script>
+    <script>
+        const calcButton = document.getElementById("calc");
+        const generateButton = document.getElementById("generate");
+        const downloadButton = document.getElementById("download");
+        const svg = document.querySelector("svg");
+
+        function setScript(script) {
+            const scriptTextArea = document.getElementById("script");
+            scriptTextArea.blur();
+            scriptTextArea.value = script;
+            console.log({ scriptTextArea, script });
+        }
+
+        const samplesSelect = document.getElementById("samples");
+        for (let i = 0; i < samples.length; i++) {
+            const sampleOption = document.createElement('option');
+            sampleOption.value = i;
+            sampleOption.textContent = 'サンプル' + (i + 1);
+            samplesSelect.appendChild(sampleOption);
+
+        }
+        samplesSelect.addEventListener('change', () => {
+            const idx = parseInt(samplesSelect.value);
+            console.log('change', idx, samples);
+            if (!isNaN(idx) && idx >= 0 && samples.length > idx) {
+                setScript(samples[idx]);
+                generate(svg, samples[idx]);
+            }
+        });
+
+        calcButton.addEventListener('click', () => {
+            const divisor = document.getElementById("divisor").value;
+            const dividend = document.getElementById("dividend").value;
+
+            const str = longDivision(divisor, dividend);
+            setScript(str);
+            generate(svg, str);
+        });
+
+        downloadButton.addEventListener("click", () => {
+            const divisor = document.getElementById("divisor").value;
+            const dividend = document.getElementById("dividend").value;
+
+            const content = document.querySelector("svg").outerHTML;
+            const blob = new Blob([content], { "type": "image/svg+xml" });
+            const filename = `LongDiv2Img_${divisor}_${dividend}.svg`;
+
+            downloadButton.setAttribute("download", filename);
+            document.getElementById("download").href = window.URL.createObjectURL(blob);
+        });
+
+        generateButton.addEventListener("click", () => {
+            const scriptTextArea = document.getElementById("script");
+            const script = scriptTextArea.value;
+            generate(svg, script);
+        });
+    </script>
+</body>
+
+</html>
