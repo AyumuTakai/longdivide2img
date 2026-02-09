@@ -62,7 +62,7 @@
             const scriptTextArea = document.getElementById("script");
             scriptTextArea.blur();
             scriptTextArea.value = script;
-            console.log({ scriptTextArea, script });
+            // console.log({ scriptTextArea, script });
         }
 
         const samplesSelect = document.getElementById("samples");
@@ -75,7 +75,7 @@
         }
         samplesSelect.addEventListener('change', () => {
             const idx = parseInt(samplesSelect.value);
-            console.log('change', idx, samples);
+            // console.log('change', idx, samples);
             if (!isNaN(idx) && idx >= 0 && samples.length > idx) {
                 setScript(samples[idx]);
                 generate(svg, samples[idx]);

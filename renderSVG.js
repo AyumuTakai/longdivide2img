@@ -73,7 +73,7 @@ function generate(svg, script) {
 
 
     const lines = script.split("\n");
-    console.log({ lines });
+    // console.log({ lines });
 
     let row = 1;
     lines.forEach(line => {
@@ -103,7 +103,7 @@ function generate(svg, script) {
 
             // 被除数の数値部分の表示幅
             const result = /^\s*([+-]?(?:\d+\.?\d*|\.\d+))/.exec(dividend);
-            console.log({result});
+            // console.log({result});
                 const vText = createText(0,0,lineHeight,width,result[1]);
                 numbers.appendChild(vText);
                 const vTextBBox = vText.getBBox();
@@ -121,7 +121,7 @@ function generate(svg, script) {
             let x = 0;
             if (found) {
                 const len = found[1].length
-                console.log({ len, row, lineHeight, width, line });
+                // console.log({ len, row, lineHeight, width, line });
                 row--;
                 for (let i = 0; i < line.length; i++) {
                     if (line[i] !== " ") {
@@ -139,7 +139,7 @@ function generate(svg, script) {
                 svg.appendChild(hr);
             } else {
                 // 途中の値
-                console.log({ row, lineHeight, width, line });
+                // console.log({ row, lineHeight, width, line });
                 lineText = createText(0, row, lineHeight, width, line);
                 numbers.appendChild(lineText);
                 const lineTextBBox = lineText.getBBox();
